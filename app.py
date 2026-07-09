@@ -30,8 +30,10 @@ from routes.admin  import admin_bp
 
 
 def create_app():
-    app = Flask(__name__)
-    app.secret_key = 'rasanusa_2024_ganti_dengan_key_yang_aman'
+    app = Flask(__name__, static_folder='static')
+    # Cache static files 7 hari di browser (CSS, JS, gambar)
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 604800
+    app.secret_key = 'reseploka_2026_ganti_dengan_key_yang_aman'
 
     # ── Inisialisasi extensions ───────────────────────────────────────────────
     login_manager.init_app(app)

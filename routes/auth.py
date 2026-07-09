@@ -33,12 +33,14 @@ def login():
 
         # Cek user di database
         row = find_by_username(username)
-        if row and verify_password(row, password):
-            login_user(User(row['id'], row['username'], row['is_admin']), remember=True)
-            next_page = request.args.get('next')
-            return redirect(next_page or url_for('main.index'))
-
-        flash('Username atau password salah.', 'danger')
+        if row:
+            if verify_password(row, password):
+                login_user(User(row['id'], row['username'], row['is_admin']), remember=True)
+                next_page = request.args.get('next')
+                return redirect(next_page or url_for('main.index'))
+            flash('Password salah.', 'danger')
+        else:
+            flash('Akun belum terdaftar.', 'danger')
 
     return render_template('login.html')
 
@@ -55,8 +57,8 @@ def register():
 
         if not username or not password:
             flash('Username dan password tidak boleh kosong.', 'danger')
-        elif len(username) < 3:
-            flash('Username minimal 3 karakter.', 'danger')
+        elif len(username) < 6:
+            flash('Username minimal 6 karakter.', 'danger')
         elif len(password) < 6:
             flash('Password minimal 6 karakter.', 'danger')
         elif password != password2:

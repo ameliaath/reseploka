@@ -416,55 +416,109 @@ body {
 }
 
 /* Recipe result card */
+/* ── Search result: 2 kolom simetris ── */
+#searchResultsList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  #searchResultsList { grid-template-columns: 1fr; }
+}
+
 .recipe-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px 20px;
-  margin-bottom: 12px;
+  border-radius: 18px;
   cursor: pointer;
   transition: all 0.25s ease;
   text-decoration: none;
-  display: block;
-  position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.recipe-card::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 4px;
-  background: linear-gradient(180deg, var(--accent-deep), var(--accent));
-  border-radius: 4px 0 0 4px;
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
 .recipe-card:hover {
-  transform: translateX(4px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
   border-color: var(--accent);
   text-decoration: none;
 }
 
-.recipe-card:hover::before {
-  opacity: 1;
+/* Foto resep */
+.recipe-card-img-wrap {
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+  position: relative;
+  flex-shrink: 0;
+}
+.recipe-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+  display: block;
+}
+.recipe-card:hover .recipe-card-img-wrap img {
+  transform: scale(1.06);
+}
+
+/* Fallback emoji */
+.recipe-card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: rgba(255,255,255,0.6);
+}
+
+/* Badge % cocok */
+.recipe-card-badge-sim {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* Konten bawah foto */
+.recipe-card-body {
+  padding: 8px 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .recipe-card-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 6px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .recipe-card-meta {
   display: flex;
-  gap: 14px;
-  font-size: 0.8rem;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.78rem;
   color: var(--text-muted);
+  margin-top: auto;
 }
 
 .recipe-card-meta span {
@@ -960,4 +1014,157 @@ button,
 .search-btn {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Foto resep di hero ── */
+.recipe-hero-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.recipe-hero-img-wrap {
+  width: 280px;
+  height: 200px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-hover);
+}
+.recipe-hero-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.recipe-hero-info {
+  flex: 1;
+  min-width: 240px;
+}
+@media (max-width: 640px) {
+  .recipe-hero-img-wrap { width: 100%; height: 200px; }
+}
+
+/* ── Category page: grid rapi ── */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.category-recipe-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  transition: all .25s ease;
+}
+.category-recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent);
+}
+.category-recipe-card-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+}
+.category-recipe-card-body {
+  padding: 12px 14px;
+}
+.category-recipe-card-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.35;
+}
+.category-recipe-card-meta {
+  font-size: .78rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Favorit & Riwayat: card dengan foto kecil di kiri ── */
+.fav-riwayat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fav-riwayat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 16px;
+  text-decoration: none;
+  transition: all .25s ease;
+  overflow: hidden;
+}
+.fav-riwayat-card:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent);
+  text-decoration: none;
+}
+.fav-riwayat-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+}
+.fav-riwayat-img-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+.fav-riwayat-info {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+.fav-riwayat-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.35;
+}
+.fav-riwayat-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  align-items: center;
+}
+.fav-riwayat-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }

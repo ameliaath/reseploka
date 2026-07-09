@@ -78,6 +78,7 @@ def recipe(recipe_id):
             'loves'   : int(row['Loves']),
             'url'     : row.get('URL', ''),
             'keywords': row.get('Keywords', ''),
+            'photo'   : row.get('Photo', '') or '',
         },
         ingredients    =ingredients,
         steps          =steps,

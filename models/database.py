@@ -8,15 +8,15 @@ Konfigurasi lewat environment variables (atau file .env):
   DB_PORT     = 5432               (default: 5432)
   DB_USER     = postgres           (default: postgres)
   DB_PASSWORD = your_password
-  DB_NAME     = rasanusa           (default: rasanusa)
+  DB_NAME     = reseploka           (default: reseploka)
   DB_SSLMODE  = prefer             (opsional: disable | allow | prefer | require | verify-full)
 
 Contoh .env untuk lokal:
   DB_HOST=localhost
   DB_PORT=5432
-  DB_USER=rasanusa_user
+  DB_USER=reseploka_user
   DB_PASSWORD=rahasia123
-  DB_NAME=rasanusa
+  DB_NAME=reseploka
 
 Contoh .env untuk Supabase (production):
   DB_HOST=db.xxxxxxxxxxxx.supabase.co
@@ -38,7 +38,7 @@ POSTGRES_CONFIG = {
     'port'    : int(os.environ.get('DB_PORT', '5432')),
     'user'    : os.environ.get('DB_USER',     'postgres'),
     'password': os.environ.get('DB_PASSWORD', ''),
-    'dbname'  : os.environ.get('DB_NAME',     'rasanusa'),
+    'dbname'  : os.environ.get('DB_NAME',     'reseploka'),
     'sslmode' : os.environ.get('DB_SSLMODE',  'prefer'),
 }
 

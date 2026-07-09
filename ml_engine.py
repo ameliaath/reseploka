@@ -84,6 +84,9 @@ df['Loves'] = pd.to_numeric(df['Loves'], errors='coerce').fillna(0).astype(int)
 df['id']    = df.index
 df['ingredients_clean'] = df['Ingredients'].apply(_clean_ingredients)
 df['tags']              = df['Ingredients'].apply(lambda x: _tag_recipe(str(x)))
+if 'Photo' not in df.columns:
+    df['Photo'] = ''
+df['Photo'] = df['Photo'].fillna('')
 
 tfidf        = TfidfVectorizer(max_features=3000, ngram_range=(1, 2), min_df=2)
 tfidf_matrix = tfidf.fit_transform(df['ingredients_clean'])
@@ -137,6 +140,7 @@ def search_recipes(query: str, sort_by: str, page: int, per_page: int, prefs: di
             'category'  : r['Category'],
             'loves'     : int(r['Loves']),
             'similarity': round(float(r['similarity']) * 100, 1),
+            'photo'     : r.get('Photo', '') or CATEGORY_IMAGES.get(r['Category'], ''),
         }
         for _, r in paged.iterrows()
     ]

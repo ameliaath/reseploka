@@ -38,12 +38,20 @@
     <a href="?sort=loves_asc" class="sort-btn {{ 'active' if sort_by == 'loves_asc' }}">🤍 Paling Sedikit Suka</a>
   </div>
 
-  <div class="stagger">
+  <div class="category-grid">
     {% for r in recipes %}
-    <a href="{{ url_for('recipe.recipe', recipe_id=r.id) }}" class="recipe-card">
-      <div class="recipe-card-title">{{ r.title }}</div>
-      <div class="recipe-card-meta">
-        <span class="loves-badge"><i class="bi bi-heart-fill"></i> {{ r.loves }}</span>
+    <a href="{{ url_for('recipe.recipe', recipe_id=r.id) }}" class="category-recipe-card">
+      {% if r.photo %}
+      <img src="{{ r.photo }}" alt="{{ r.title }}" class="category-recipe-card-img"
+           onerror="this.style.background='linear-gradient(135deg,var(--accent-deep),var(--accent))';this.style.minHeight='160px';">
+      {% else %}
+      <div class="category-recipe-card-img" style="display:flex;align-items:center;justify-content:center;font-size:3rem;min-height:160px">🍽️</div>
+      {% endif %}
+      <div class="category-recipe-card-body">
+        <div class="category-recipe-card-title">{{ r.title }}</div>
+        <div class="category-recipe-card-meta">
+          <span class="loves-badge"><i class="bi bi-heart-fill"></i> {{ r.loves }}</span>
+        </div>
       </div>
     </a>
     {% endfor %}

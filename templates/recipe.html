@@ -68,24 +68,36 @@
       </ol>
     </nav>
 
-    <span class="recipe-category-badge">{{ recipe.category | capitalize }}</span>
-    <h1 class="recipe-hero-title">{{ recipe.title }}</h1>
-
-    <div class="recipe-meta-row">
-      <div class="meta-chip">
-        <i class="bi bi-heart-fill" style="color:var(--accent)"></i>
-        <span>{{ recipe.loves }} orang menyukai ini</span>
-      </div>
-      {% if recipe.keywords %}
-      <div class="meta-chip">
-        <i class="bi bi-tags"></i>
-        <span>{{ recipe.keywords.replace('|', ' · ')[:60] }}</span>
+    <div class="recipe-hero-inner">
+      <!-- Foto resep -->
+      {% if recipe.photo %}
+      <div class="recipe-hero-img-wrap">
+        <img src="{{ recipe.photo }}" alt="{{ recipe.title }}"
+             onerror="this.parentNode.style.display='none'">
       </div>
       {% endif %}
-      <button class="fav-btn {{ 'active' if is_favorite else '' }}" id="favBtn" data-recipe-id="{{ recipe.id }}">
-        <i class="bi {{ 'bi-heart-fill' if is_favorite else 'bi-heart' }}"></i>
-        <span class="fav-label">{{ 'Tersimpan' if is_favorite else 'Favorit' }}</span>
-      </button>
+
+      <div class="recipe-hero-info">
+        <span class="recipe-category-badge">{{ recipe.category | capitalize }}</span>
+        <h1 class="recipe-hero-title">{{ recipe.title }}</h1>
+
+        <div class="recipe-meta-row">
+          <div class="meta-chip">
+            <i class="bi bi-heart-fill" style="color:var(--accent)"></i>
+            <span>{{ recipe.loves }} orang menyukai ini</span>
+          </div>
+          {% if recipe.keywords %}
+          <div class="meta-chip">
+            <i class="bi bi-tags"></i>
+            <span>{{ recipe.keywords.replace('|', ' · ')[:60] }}</span>
+          </div>
+          {% endif %}
+          <button class="fav-btn {{ 'active' if is_favorite else '' }}" id="favBtn" data-recipe-id="{{ recipe.id }}">
+            <i class="bi {{ 'bi-heart-fill' if is_favorite else 'bi-heart' }}"></i>
+            <span class="fav-label">{{ 'Tersimpan' if is_favorite else 'Favorit' }}</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>

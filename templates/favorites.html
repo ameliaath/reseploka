@@ -13,7 +13,7 @@
   </div>
 </div>
 
-<div class="container py-5">
+<div class="container py-5" style="max-width:760px">
   {% if recipes %}
   <!-- Sort bar -->
   <div class="sort-bar mb-4">
@@ -23,23 +23,46 @@
     <a href="?sort=loves_asc" class="sort-btn {{ 'active' if sort_by == 'loves_asc' }}">🤍 Paling Sedikit Suka</a>
   </div>
 
-  <div class="stagger">
+  {% set CAT_EMOJI = {'ayam':'🍗','ikan':'🐟','kambing':'🥩','sapi':'🥩','tahu':'🟨','telur':'🍳','tempe':'🫘','udang':'🦐'} %}
+
+  <div class="fav-riwayat-grid">
     {% for r in recipes %}
-    <a href="{{ url_for('recipe.recipe', recipe_id=r.id) }}" class="recipe-card">
-      <div class="recipe-card-title">{{ r.title }}</div>
-      <div class="recipe-card-meta">
-        <span><i class="bi bi-tag"></i> {{ r.category | capitalize }}</span>
-        <span class="loves-badge"><i class="bi bi-heart-fill"></i> {{ r.loves }}</span>
+    <a href="{{ url_for('recipe.recipe', recipe_id=r.id) }}" class="fav-riwayat-card">
+      {% if r.photo %}
+      <img src="{{ r.photo }}" alt="{{ r.title }}" class="fav-riwayat-img"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="fav-riwayat-img-placeholder" style="display:none">
+        {{ CAT_EMOJI.get(r.category, '🍽️') }}
       </div>
+      {% else %}
+      <div class="fav-riwayat-img-placeholder">
+        {{ CAT_EMOJI.get(r.category, '🍽️') }}
+      </div>
+      {% endif %}
+
+      <div class="fav-riwayat-info">
+        <div class="fav-riwayat-title">{{ r.title }}</div>
+        <div class="fav-riwayat-meta">
+          <span><i class="bi bi-tag"></i> {{ r.category | capitalize }}</span>
+          <span class="loves-badge"><i class="bi bi-heart-fill"></i> {{ r.loves }}</span>
+          {% if r.rating %}
+          <span style="color:#f59e0b">
+            {% for i in range(r.rating) %}★{% endfor %}{% for i in range(5 - r.rating) %}☆{% endfor %}
+          </span>
+          {% endif %}
+        </div>
+      </div>
+      <i class="bi bi-arrow-right-circle" style="color:var(--accent);font-size:1.2rem;opacity:.5;flex-shrink:0"></i>
     </a>
     {% endfor %}
   </div>
+
   {% else %}
   <div class="empty-state">
     <span class="emoji">💔</span>
     <p>Belum ada resep favorit.</p>
     <p>Klik <strong><i class="bi bi-heart"></i> Favorit</strong> pada halaman resep untuk menyimpannya!</p>
-    <a href="{{ url_for('main.index') }}" style="display:inline-block; margin-top:16px; padding: 10px 24px; background: linear-gradient(135deg, var(--accent-deep), var(--accent)); color:#fff; border-radius:50px; text-decoration:none; font-weight:700">
+    <a href="{{ url_for('main.index') }}" style="display:inline-block;margin-top:16px;padding:10px 24px;background:linear-gradient(135deg,var(--accent-deep),var(--accent));color:#fff;border-radius:50px;text-decoration:none;font-weight:700">
       Cari Resep Sekarang
     </a>
   </div>

@@ -201,6 +201,30 @@ def export_pdf(recipe_id):
         foot_s   = ps('F',  fontSize=8, textColor=GRAY, alignment=TA_CENTER, spaceBefore=14)
 
         stars_str = ('★' * user_rating + '☆' * (5 - user_rating)) if user_rating else 'Belum dinilai'
+
+        # Foto resep dari kolom Photo di dataset
+        photo_url = str(row.get('Photo', '') or '').strip()
+
+        # Elemen foto (kalau ada)
+        photo_elements = []
+        if photo_url:
+            try:
+                import urllib.request as _ur
+                from reportlab.platypus import Image as RLImage
+                from reportlab.lib.units import cm as _cm
+                _req = _ur.Request(photo_url, headers={'User-Agent': 'Mozilla/5.0'})
+                _resp = _ur.urlopen(_req, timeout=8)
+                _img_data = _resp.read()
+                _img_buf = io.BytesIO(_img_data)
+                # Foto dibuat lebih kecil (tidak selebar halaman) agar tidak mendominasi
+                _img_w = 8.5*_cm
+                _img_h = _img_w * 9 / 16   # rasio 16:9
+                _rl_img = RLImage(_img_buf, width=_img_w, height=_img_h)
+                _rl_img.hAlign = 'CENTER'
+                photo_elements = [Spacer(1, 0.4*_cm), _rl_img, Spacer(1, 0.2*_cm)]
+            except Exception:
+                photo_elements = []  # Gagal load foto → skip, PDF tetap dibuat
+
         story = [
             Spacer(1, 0.2*cm),
             Paragraph(ct(row['Title']), title_s),
@@ -210,6 +234,7 @@ def export_pdf(recipe_id):
                 sub_s
             ),
             HRFlowable(width='100%', thickness=2, color=PINK, spaceAfter=10),
+            *photo_elements,
         ]
 
         # Bahan

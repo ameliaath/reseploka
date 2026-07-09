@@ -54,7 +54,12 @@ def category(cat_name):
     else:                         cat_df = cat_df.sort_values('Loves', ascending=False)
 
     recipes = [
-        {'id': int(r['id']), 'title': r['Title'], 'loves': int(r['Loves'])}
+        {
+            'id'   : int(r['id']),
+            'title': r['Title'],
+            'loves': int(r['Loves']),
+            'photo': r.get('Photo', '') or '',
+        }
         for _, r in cat_df.head(50).iterrows()
     ]
     favs = get_favorites(current_user.id)
@@ -85,6 +90,7 @@ def favorites():
             'category': df.iloc[fid]['Category'],
             'loves'   : int(df.iloc[fid]['Loves']),
             'rating'  : ratings.get(str(fid), 0),
+            'photo'   : df.iloc[fid].get('Photo', '') or '',
         }
         for fid in fav_ids if 0 <= fid < len(df)
     ]
@@ -110,6 +116,11 @@ def riwayat():
 
     for item in history:
         item['rating'] = ratings.get(str(item['id']), 0)
+        rid = item['id']
+        if 0 <= rid < len(df):
+            item['photo'] = df.iloc[rid].get('Photo', '') or ''
+        else:
+            item['photo'] = ''
 
     return render_template('riwayat.html',
         history=history,
