@@ -320,6 +320,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (link) link.href = `/api/export-pdf/${RECIPE_ID}?servings=${currentServings}`;
   }
 
+  // Pastikan checklist & catatan yang baru diketik sudah tersimpan ke server
+  // SEBELUM PDF dibuat. Tanpa ini, di koneksi yang lebih lambat (mobile),
+  // klik "Unduh PDF" bisa mendahului proses simpan yang belum selesai,
+  // sehingga daftar belanja/catatan tidak ikut masuk ke PDF.
+  document.getElementById('pdfLink')?.addEventListener('click', function (e) {
+    if (window.__pendingSaves && window.__pendingSaves.length > 0) {
+      e.preventDefault();
+      const href = this.href;
+      const originalHtml = this.innerHTML;
+      this.innerHTML = '<i class="bi bi-hourglass-split"></i> Menyimpan...';
+      window.flushPendingSaves().finally(() => {
+        this.innerHTML = originalHtml;
+        window.location.href = href;
+      });
+    }
+  });
+
   document.getElementById('applyTakaran')?.addEventListener('click', async () => {
     const btn = document.getElementById('applyTakaran');
     btn.disabled = true;

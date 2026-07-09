@@ -4,7 +4,7 @@
 
 // ── Theme Manager ──────────────────────────────────────────────────────────
 const ThemeManager = {
-  STORAGE_KEY: 'reseploka_theme',
+  STORAGE_KEY: 'rasanusa_theme',
 
   get() {
     return localStorage.getItem(this.STORAGE_KEY) || 'auto';
@@ -296,6 +296,21 @@ function initFavoriteBtn() {
   });
 }
 
+// ── Pelacak proses simpan yang masih berjalan (checklist & catatan) ─────────
+// Dipakai supaya tombol "Unduh PDF" bisa menunggu proses simpan selesai dulu,
+// mencegah data checklist/catatan belum masuk ke database saat PDF dibuat
+// (terutama di koneksi mobile yang lebih lambat dari laptop/WiFi).
+window.__pendingSaves = [];
+function trackSave(promise) {
+  window.__pendingSaves.push(promise);
+  const clear = () => {
+    window.__pendingSaves = window.__pendingSaves.filter(p => p !== promise);
+  };
+  promise.then(clear, clear);
+  return promise;
+}
+window.flushPendingSaves = () => Promise.all(window.__pendingSaves).catch(() => {});
+
 // ── Checklist ─────────────────────────────────────────────────────────────
 function initChecklist() {
   const container = document.getElementById('checklistContainer');
@@ -351,11 +366,11 @@ async function saveChecklist(recipeId) {
     const input = item.querySelector('.checklist-input');
     items.push({ text: input?.value || '', checked: cb?.checked || false });
   });
-  await fetch('/api/checklist', {
+  await trackSave(fetch('/api/checklist', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ recipe_id: recipeId, items })
-  });
+  }));
 }
 
 // ── Notes ─────────────────────────────────────────────────────────────────
@@ -378,11 +393,11 @@ async function submitNote(recipeId) {
   if (!text) return;
 
   try {
-    const res = await fetch('/api/note', {
+    const res = await trackSave(fetch('/api/note', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ recipe_id: recipeId, note: text })
-    });
+    }));
     const data = await res.json();
     if (data.success) {
       input.value = '';

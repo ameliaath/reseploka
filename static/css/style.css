@@ -423,7 +423,16 @@ body {
   gap: 12px;
 }
 @media (max-width: 640px) {
-  #searchResultsList { grid-template-columns: 1fr; }
+  #searchResultsList {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .search-results-panel { padding: 24px 4px; }
+  .recipe-card-img-wrap { aspect-ratio: 1/1; }
+  .recipe-card-body { padding: 7px 9px; gap: 2px; }
+  .recipe-card-title { font-size: .82rem; }
+  .recipe-card-meta { font-size: .68rem; gap: 5px; }
+  .recipe-card-badge-sim { font-size: .62rem; padding: 2px 8px; }
 }
 
 .recipe-card {
@@ -1041,7 +1050,8 @@ button,
   min-width: 240px;
 }
 @media (max-width: 640px) {
-  .recipe-hero-img-wrap { width: 100%; height: 200px; }
+  .recipe-hero-inner { gap: 16px; }
+  .recipe-hero-img-wrap { width: 100%; height: 160px; }
 }
 
 /* ── Category page: grid rapi ── */
@@ -1093,6 +1103,19 @@ button,
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+/* ── Halaman Kategori: 2 kolom simetris + lebih kecil di mobile ── */
+@media (max-width: 640px) {
+  .category-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 2px;
+  }
+  .category-recipe-card-img { aspect-ratio: 1/1; }
+  .category-recipe-card-body { padding: 8px 10px; }
+  .category-recipe-card-title { font-size: .8rem; margin-bottom: 4px; }
+  .category-recipe-card-meta { font-size: .68rem; }
 }
 
 /* ── Favorit & Riwayat: card dengan foto kecil di kiri ── */
