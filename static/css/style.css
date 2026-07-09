@@ -433,6 +433,13 @@ body {
   .recipe-card-title { font-size: .82rem; }
   .recipe-card-meta { font-size: .68rem; gap: 5px; }
   .recipe-card-badge-sim { font-size: .62rem; padding: 2px 8px; }
+
+  /* Sort bar: tombol dibuat lebih kecil supaya "Paling Banyak/Sedikit Suka"
+     tetap sejajar satu baris, dan jumlah resep pindah ke baris sendiri
+     (bukan kedorong ke kanan di tengah baris tombol). */
+  .sort-bar { gap: 8px; row-gap: 8px; }
+  .sort-btn { padding: 5px 12px; font-size: .76rem; }
+  .result-count { flex-basis: 100%; margin-left: 0; font-size: .8rem; }
 }
 
 .recipe-card {
