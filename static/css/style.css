@@ -427,7 +427,7 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-  .search-results-panel { padding: 24px 4px; }
+  .search-results-panel { padding: 24px 16px; }
   .recipe-card-img-wrap { aspect-ratio: 1/1; }
   .recipe-card-body { padding: 7px 9px; gap: 2px; }
   .recipe-card-title { font-size: .82rem; }

@@ -9,7 +9,7 @@ from datetime import datetime
 from flask import Blueprint, request, jsonify, send_file
 from flask_login import login_required, current_user
 
-from ml_engine        import df
+from ml_engine        import df, CATEGORY_IMAGES
 from models.favorite  import toggle_favorite
 from models.note      import add_note, delete_note, save_checklist, get_notes, get_checklist
 from models.rating    import set_rating, save_preferences, get_ratings
@@ -202,8 +202,10 @@ def export_pdf(recipe_id):
 
         stars_str = ('★' * user_rating + '☆' * (5 - user_rating)) if user_rating else 'Belum dinilai'
 
-        # Foto resep dari kolom Photo di dataset
-        photo_url = str(row.get('Photo', '') or '').strip()
+        # Foto resep dari kolom Photo di dataset — kalau resep tidak punya foto
+        # sendiri, pakai foto kategori sebagai cadangan (sama seperti di
+        # halaman pencarian & kategori), supaya PDF tidak pernah kosong fotonya.
+        photo_url = str(row.get('Photo', '') or CATEGORY_IMAGES.get(row['Category'], '') or '').strip()
 
         # Elemen foto (kalau ada)
         photo_elements = []

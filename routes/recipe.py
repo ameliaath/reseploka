@@ -6,7 +6,7 @@ Blueprint untuk halaman resep dan pencarian.
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
 
-from ml_engine      import df, search_recipes, get_recommendations, get_top_features
+from ml_engine      import df, search_recipes, get_recommendations, get_top_features, CATEGORY_IMAGES
 from models.favorite import get_favorites
 from models.rating   import get_ratings, get_preferences
 from models.note     import get_notes, get_checklist
@@ -78,7 +78,7 @@ def recipe(recipe_id):
             'loves'   : int(row['Loves']),
             'url'     : row.get('URL', ''),
             'keywords': row.get('Keywords', ''),
-            'photo'   : row.get('Photo', '') or '',
+            'photo'   : row.get('Photo', '') or CATEGORY_IMAGES.get(row['Category'], ''),
         },
         ingredients    =ingredients,
         steps          =steps,
