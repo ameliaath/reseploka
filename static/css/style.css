@@ -287,6 +287,39 @@ body {
   box-shadow: 0 4px 16px var(--accent-glow);
 }
 
+/* Penjelasan: pencarian berbasis bahan, bukan nama masakan */
+.search-guide {
+  max-width: 560px;
+  margin: -32px auto 20px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 16px;
+}
+
+.search-guide i {
+  color: var(--accent-deep);
+  margin-right: 4px;
+}
+
+.search-guide-dish {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.search-guide-example {
+  color: var(--accent-deep);
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .search-guide { margin-top: -20px; }
+}
+
 /* Search autocomplete tag hints */
 .search-hints {
   display: flex;
@@ -383,6 +416,19 @@ body {
   padding: 40px 0;
 }
 
+.results-info-note {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+}
+
+.results-info-note i { color: var(--accent-deep); margin-right: 4px; }
+
 .sort-bar {
   display: flex;
   align-items: center;
@@ -413,6 +459,38 @@ body {
   color: var(--text-muted);
   font-size: 0.9rem;
   margin-left: auto;
+}
+
+/* Load more button */
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.load-more-btn {
+  padding: 10px 24px;
+  border: 1.5px solid var(--accent);
+  border-radius: 24px;
+  background: var(--bg-card);
+  color: var(--accent-deep);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.load-more-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
 }
 
 /* Recipe result card */

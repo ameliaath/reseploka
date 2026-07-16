@@ -38,6 +38,7 @@ def index():
         categories=categories,
         favorites_count=len(favs),
         prefs=prefs,
+        total_recipes=len(df),
     )
 
 

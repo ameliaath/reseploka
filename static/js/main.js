@@ -81,6 +81,9 @@ const SearchManager = {
   currentQuery: '',
   currentSort: '',
   currentPage: 1,
+  perPage: 20,
+  totalResults: 0,
+  shownCount: 0,
   loading: false,
 
   init() {
@@ -115,6 +118,11 @@ const SearchManager = {
       });
     });
 
+    // Load more button
+    document.getElementById('loadMoreBtn')?.addEventListener('click', () => {
+      this.loadMore();
+    });
+
     // URL params
     const params = new URLSearchParams(window.location.search);
     const q = params.get('q');
@@ -124,18 +132,38 @@ const SearchManager = {
     }
   },
 
+  updateCountLabel() {
+    const countEl = document.getElementById('resultCount');
+    if (!countEl) return;
+    if (this.totalResults === 0) {
+      countEl.textContent = '';
+    } else if (this.shownCount >= this.totalResults) {
+      countEl.textContent = `Menampilkan semua ${this.totalResults} resep yang cocok`;
+    } else {
+      countEl.textContent = `Menampilkan ${this.shownCount} dari ${this.totalResults} resep paling cocok`;
+    }
+  },
+
+  updateLoadMoreVisibility() {
+    const wrap = document.getElementById('loadMoreWrap');
+    if (!wrap) return;
+    wrap.style.display = this.shownCount < this.totalResults ? 'flex' : 'none';
+  },
+
   async doSearch(query) {
     if (!query) return;
     this.currentQuery = query;
     this.currentPage = 1;
+    this.shownCount = 0;
 
     const panel = document.getElementById('searchResultsPanel');
     const list = document.getElementById('searchResultsList');
-    const countEl = document.getElementById('resultCount');
     const catSection = document.getElementById('categorySection');
+    const loadMoreWrap = document.getElementById('loadMoreWrap');
 
     if (panel) panel.style.display = 'block';
     if (catSection) catSection.style.display = 'none';
+    if (loadMoreWrap) loadMoreWrap.style.display = 'none';
 
     if (list) list.innerHTML = '<div class="spinner-pink"></div>';
 
@@ -148,11 +176,14 @@ const SearchManager = {
       const res = await fetch(`/search?q=${encodeURIComponent(query)}&sort=${this.currentSort}&page=${this.currentPage}`);
       const data = await res.json();
 
-      if (countEl) countEl.textContent = `${data.total} resep ditemukan`;
+      this.totalResults = data.total || 0;
+      this.perPage = data.per_page || this.perPage;
 
       if (!list) return;
 
       if (!data.results || data.results.length === 0) {
+        this.shownCount = 0;
+        this.updateCountLabel();
         list.innerHTML = `
           <div class="empty-state">
             <span class="emoji">🔍</span>
@@ -168,8 +199,52 @@ const SearchManager = {
         list.appendChild(card);
       });
 
+      this.shownCount = data.results.length;
+      this.updateCountLabel();
+      this.updateLoadMoreVisibility();
+
     } catch (err) {
       if (list) list.innerHTML = '<p class="text-center text-danger mt-4">Terjadi kesalahan. Coba lagi.</p>';
+    }
+  },
+
+  async loadMore() {
+    if (this.loading || this.shownCount >= this.totalResults) return;
+    this.loading = true;
+
+    const btn = document.getElementById('loadMoreBtn');
+    const list = document.getElementById('searchResultsList');
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Memuat...';
+    }
+
+    try {
+      this.currentPage += 1;
+      const res = await fetch(`/search?q=${encodeURIComponent(this.currentQuery)}&sort=${this.currentSort}&page=${this.currentPage}`);
+      const data = await res.json();
+
+      this.totalResults = data.total || this.totalResults;
+
+      if (list && data.results) {
+        data.results.forEach((r, i) => {
+          const card = this.buildCard(r, this.currentQuery, this.shownCount + i);
+          list.appendChild(card);
+        });
+        this.shownCount += data.results.length;
+      }
+
+      this.updateCountLabel();
+      this.updateLoadMoreVisibility();
+
+    } catch (err) {
+      this.currentPage -= 1; // rollback so a retry re-requests the same page
+    } finally {
+      this.loading = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-arrow-down-circle"></i> Muat Resep Lainnya';
+      }
     }
   },
 

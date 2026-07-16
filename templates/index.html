@@ -11,7 +11,7 @@
       Temukan <span>Resep Masakan</span><br>Indonesia Favoritmu
     </h1>
     <p class="hero-subtitle">
-      Cari berdasarkan bahan yang ada di dapurmu ✨
+      Ketik <strong>bahan yang ada di dapurmu</strong>, bukan nama masakannya ✨
     </p>
 
     <!-- Search box -->
@@ -28,6 +28,15 @@
       </button>
     </div>
 
+    <!-- Penjelasan singkat: pencarian berbasis bahan, bukan nama resep -->
+    <p class="search-guide">
+      <i class="bi bi-lightbulb-fill"></i>
+      Mau cari <span class="search-guide-dish">"udang asam manis"</span>?
+      Ketik bahannya, misalnya
+      <span class="search-guide-example">udang, saus tomat, cabai</span> —
+      bukan nama masakannya, ya. Sistem kami mencocokkan bahan, bukan judul resep.
+    </p>
+
     <!-- Hint tags -->
     <div class="search-hints">
       {% set hints = ['ayam', 'tempe', 'tahu', 'santan', 'bawang putih', 'cabai', 'telur', 'ikan', 'udang', 'jahe'] %}
@@ -40,6 +49,13 @@
 
 <!-- ── Search Results (hidden until search) ── -->
 <section class="search-results-panel container" id="searchResultsPanel">
+  <p class="results-info-note">
+    <i class="bi bi-stars"></i>
+    Hasil diurutkan berdasarkan <strong>kemiripan bahan</strong> dari
+    {% if total_recipes %}{{ "{:,}".format(total_recipes).replace(",", ".") }}{% else %}ribuan{% endif %}
+    resep di database kami — hanya yang paling cocok yang ditampilkan lebih dulu,
+    jadi menunya jauh lebih variatif dari yang terlihat di layar 😉
+  </p>
   <div class="sort-bar">
     <span class="fw-bold" style="color:var(--text-secondary)"><i class="bi bi-sort-down"></i> Urutkan:</span>
     <button class="sort-btn active" data-sort="">Paling Relevan</button>
@@ -48,6 +64,11 @@
     <span class="result-count" id="resultCount"></span>
   </div>
   <div id="searchResultsList"></div>
+  <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+    <button class="load-more-btn" id="loadMoreBtn">
+      <i class="bi bi-arrow-down-circle"></i> Muat Resep Lainnya
+    </button>
+  </div>
 </section>
 
 <!-- ── Category Grid ── -->
