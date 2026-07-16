@@ -140,7 +140,7 @@ def search_recipes(query: str, sort_by: str, page: int, per_page: int, prefs: di
             'category'  : r['Category'],
             'loves'     : int(r['Loves']),
             'similarity': round(float(r['similarity']) * 100, 1),
-            'photo'     : r.get('Photo', '') or CATEGORY_IMAGES.get(r['Category'], ''),
+            'photo'     : r.get('Photo', '') or '',
         }
         for _, r in paged.iterrows()
     ]

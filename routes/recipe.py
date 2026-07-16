@@ -70,6 +70,11 @@ def recipe(recipe_id):
     favs            = get_favorites(uid)
     flavor_profile  = get_flavor_profile(uid)
 
+    # Konteks asal navigasi: kalau dibuka dari hasil pencarian, breadcrumb
+    # harus balik ke pencarian itu, bukan ke halaman kategori generik.
+    from_search  = request.args.get('from') == 'search'
+    search_query = request.args.get('q', '')
+
     return render_template('recipe.html',
         recipe={
             'id'      : recipe_id,
@@ -89,4 +94,6 @@ def recipe(recipe_id):
         user_rating    =ratings.get(str(recipe_id), 0),
         top_features   =top_features,
         flavor_profile =flavor_profile,
+        from_search    =from_search,
+        search_query   =search_query,
     )

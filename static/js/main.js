@@ -253,38 +253,24 @@ const SearchManager = {
       ayam:'🍗', ikan:'🐟', kambing:'🥩', sapi:'🥩',
       tahu:'🟨', telur:'🍳', tempe:'🫘', udang:'🦐'
     };
-    const CAT_PHOTO = {
-      ayam   : 'https://www.unileverfoodsolutions.co.id/dam/global-ufs/mcos/SEA/calcmenu/recipes/ID-recipes/chicken-&-other-poultry-dishes/fillet-ayam-goreng-renyah-dengan-mayones-kopi/main-header.jpg',
-      ikan   : 'https://www.dapurkobe.co.id/wp-content/uploads/tenggiri-kuah-pedas.jpg',
-      kambing: 'https://www.dapurkobe.co.id/wp-content/uploads/sate-kambing-bumbu-kecap.jpg',
-      sapi   : 'https://www.astronauts.id/blog/wp-content/uploads/2023/11/Resep-Sop-Iga-Sapi-Khas-Betawi-untuk-Makan-Siang-Keluarga-1.jpg',
-      tahu   : 'https://img-global.cpcdn.com/recipes/489c4bd9cefaff4e/1200x630cq80/photo.jpg',
-      telur  : 'https://asset.kompas.com/crops/UCNW5kaOhr7MSTY8TNphg8L7CjM=/26x15:994x660/1200x800/data/photo/2022/04/02/624838fa00a5c.jpg',
-      tempe  : 'https://www.dapurkobe.co.id/wp-content/uploads/tempe-orek-pedas-step4.jpg',
-      udang  : 'https://www.dapurkobe.co.id/wp-content/uploads/udang-bakar-bumbu-rujak.jpg',
-    };
 
     const div = document.createElement('a');
     div.className = 'recipe-card';
-    div.href = `/recipe/${recipe.id}`;
+    div.href = `/recipe/${recipe.id}?from=search&q=${encodeURIComponent(query)}`;
     div.style.animationDelay = `${idx * 0.04}s`;
     div.style.animation = 'staggerFade 0.35s ease forwards';
     div.style.opacity = '0';
 
     const highlightedTitle = highlightText(recipe.title, query);
-    const emoji    = EMOJI[recipe.category] || '🍽️';
-    const photoUrl = recipe.photo || CAT_PHOTO[recipe.category] || '';
-
-    // Selalu ada fallback: foto spesifik → foto kategori → emoji
-    const fallbackUrl = CAT_PHOTO[recipe.category] || '';
-    const finalPhoto  = photoUrl || fallbackUrl;
+    const emoji      = EMOJI[recipe.category] || '🍽️';
+    const finalPhoto = recipe.photo || '';
 
     div.innerHTML = `
       <div class="recipe-card-img-wrap">
-        <img src="${finalPhoto || ''}" alt="${recipe.title}"
+        <img src="${finalPhoto}" alt="${recipe.title}"
              loading="lazy"
              style="${finalPhoto ? '' : 'display:none'}"
-             onerror="this.src='${fallbackUrl}';if(!this.src||this.src==='${window ? '' : ''}'){this.style.display='none';this.nextElementSibling.style.display='flex'}">
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="recipe-card-img-placeholder"
              style="${finalPhoto ? 'display:none' : 'display:flex'}">${emoji}</div>
       </div>

@@ -63,7 +63,13 @@
     <nav aria-label="breadcrumb" class="mb-3">
       <ol class="breadcrumb" style="font-size:0.85rem">
         <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}" style="color:var(--accent-deep);display:inline-flex;align-items:center;gap:4px;text-decoration:none"><span style="font-size:1em;line-height:1">🏠</span><span>Beranda</span></a></li>
-        <li class="breadcrumb-item"><a href="{{ url_for('main.category', cat_name=recipe.category) }}" style="color:var(--accent-deep)">{{ recipe.category | capitalize }}</a></li>
+        <li class="breadcrumb-item">
+          {% if from_search and search_query %}
+          <a href="{{ url_for('main.index', q=search_query) }}" style="color:var(--accent-deep)">Hasil pencarian "{{ search_query }}"</a>
+          {% else %}
+          <a href="{{ url_for('main.category', cat_name=recipe.category) }}" style="color:var(--accent-deep)">{{ recipe.category | capitalize }}</a>
+          {% endif %}
+        </li>
         <li class="breadcrumb-item active" style="color:var(--text-muted)">{{ recipe.title[:40] }}...</li>
       </ol>
     </nav>
