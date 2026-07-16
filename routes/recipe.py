@@ -11,7 +11,7 @@ from models.favorite import get_favorites
 from models.rating   import get_ratings, get_preferences
 from models.note     import get_notes, get_checklist
 from models.history  import add_history
-from models.flavor   import get_flavor_profile
+from models.flavor   import get_flavor_profile, DEFAULT_SERVINGS
 
 recipe_bp = Blueprint('recipe', __name__)
 
@@ -69,6 +69,12 @@ def recipe(recipe_id):
     ratings         = get_ratings(uid)
     favs            = get_favorites(uid)
     flavor_profile  = get_flavor_profile(uid)
+    # Porsi BUKAN preferensi global — tiap resep punya basis porsi sendiri
+    # (bahan-bahan di dataset selalu ditulis untuk DEFAULT_SERVINGS). Kalau
+    # dibiarkan pakai flavor_profile['servings'] apa adanya, porsi yang barusan
+    # di-adjust di resep lain akan "kebawa" ke resep ini. Jadi override di sini,
+    # supaya tiap resep selalu mulai dari basisnya sendiri.
+    flavor_profile  = {**flavor_profile, 'servings': DEFAULT_SERVINGS}
 
     # Konteks asal navigasi: kalau dibuka dari hasil pencarian, breadcrumb
     # harus balik ke pencarian itu, bukan ke halaman kategori generik.

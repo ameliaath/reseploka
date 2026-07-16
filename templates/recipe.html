@@ -286,15 +286,13 @@ document.addEventListener('DOMContentLoaded', () => {
     .map(el => el.dataset.raw || el.textContent.trim());
 
   // Fetch ulang profil rasa dari server dan update badge (tanpa reload halaman)
+  // CATATAN: fungsi ini HANYA untuk badge rasa (pedas/manis/gurih/asam), yang
+  // memang preferensi global. Porsi TIDAK disentuh di sini — porsi murni
+  // state halaman ini saja, supaya tidak "kebawa" ke resep lain.
   async function loadFlavorBadges() {
     try {
       const res  = await fetch('/api/flavor-profile');
       const prof = await res.json();
-      // Update servings
-      currentServings = prof.servings || currentServings;
-      const sv = document.getElementById('servVal');
-      if (sv) sv.textContent = currentServings;
-      // Update badge
       const cont = document.getElementById('flavorBadges');
       if (!cont) return;
       const LABEL = { spicy:'🌶️ Pedas', sweet:'🍯 Manis', savory:'🧂 Gurih', sour:'🍋 Asam' };
@@ -383,16 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (note) note.style.display = modCount > 0 ? 'block' : 'none';
         document.getElementById('resetTakaran').style.display = 'inline-flex';
 
-        // Simpan porsi saja (level rasa TIDAK dikirim agar tidak ter-reset)
-        // Server sudah di-fix untuk merge, bukan overwrite.
-        // PENTING: simpan dulu sebelum refresh badge, supaya loadFlavorBadges()
-        // membaca porsi yang baru saja diubah, bukan porsi lama dari server.
-        await fetch('/api/flavor-profile', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ servings: currentServings })
-        });
-
-        // Update flavor badges agar tetap tampil setelah adjust
+        // Refresh badge rasa (bukan porsi — porsi murni state halaman ini)
         await loadFlavorBadges();
       }
     } catch(e) { console.error(e); }
