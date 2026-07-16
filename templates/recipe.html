@@ -383,15 +383,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (note) note.style.display = modCount > 0 ? 'block' : 'none';
         document.getElementById('resetTakaran').style.display = 'inline-flex';
 
-        // Update flavor badges agar tetap tampil setelah adjust
-        await loadFlavorBadges();
-
         // Simpan porsi saja (level rasa TIDAK dikirim agar tidak ter-reset)
-        // Server sudah di-fix untuk merge, bukan overwrite
+        // Server sudah di-fix untuk merge, bukan overwrite.
+        // PENTING: simpan dulu sebelum refresh badge, supaya loadFlavorBadges()
+        // membaca porsi yang baru saja diubah, bukan porsi lama dari server.
         await fetch('/api/flavor-profile', {
           method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ servings: currentServings })
         });
+
+        // Update flavor badges agar tetap tampil setelah adjust
+        await loadFlavorBadges();
       }
     } catch(e) { console.error(e); }
     btn.disabled = false;
