@@ -74,6 +74,9 @@ class _PostgresConn:
     def commit(self):
         self._conn.commit()
 
+    def rollback(self):
+        self._conn.rollback()
+
     def close(self):
         try:
             self._cursor.close()
