@@ -90,6 +90,24 @@ const SearchManager = {
     const box = document.getElementById('searchBox');
     if (!box) return;
 
+    const clearBtn = document.getElementById('searchClearBtn');
+    const toggleClearBtn = () => {
+      if (!clearBtn) return;
+      clearBtn.style.display = box.value.length > 0 ? 'flex' : 'none';
+    };
+    toggleClearBtn();
+
+    // Show/hide clear (x) button as user types
+    box.addEventListener('input', toggleClearBtn);
+
+    // Clear button: kosongkan kolom & sembunyikan hasil pencarian
+    clearBtn?.addEventListener('click', () => {
+      box.value = '';
+      toggleClearBtn();
+      box.focus();
+      this.clearSearch();
+    });
+
     // Enter key
     box.addEventListener('keydown', e => {
       if (e.key === 'Enter') this.doSearch(box.value.trim());
@@ -148,6 +166,28 @@ const SearchManager = {
     const wrap = document.getElementById('loadMoreWrap');
     if (!wrap) return;
     wrap.style.display = this.shownCount < this.totalResults ? 'flex' : 'none';
+  },
+
+  clearSearch() {
+    this.currentQuery = '';
+    this.currentPage = 1;
+    this.shownCount = 0;
+    this.totalResults = 0;
+
+    const panel = document.getElementById('searchResultsPanel');
+    const list = document.getElementById('searchResultsList');
+    const catSection = document.getElementById('categorySection');
+    const loadMoreWrap = document.getElementById('loadMoreWrap');
+
+    if (panel) panel.style.display = 'none';
+    if (list) list.innerHTML = '';
+    if (catSection) catSection.style.display = '';
+    if (loadMoreWrap) loadMoreWrap.style.display = 'none';
+
+    // Bersihkan parameter "q" dari URL tanpa reload halaman
+    const url = new URL(window.location);
+    url.searchParams.delete('q');
+    window.history.replaceState({}, '', url);
   },
 
   async doSearch(query) {

@@ -247,7 +247,7 @@ body {
 
 .search-box {
   width: 100%;
-  padding: 16px 60px 16px 24px;
+  padding: 16px 96px 16px 24px;
   border: 2px solid var(--border);
   border-radius: 50px;
   background: var(--bg-card);
@@ -265,6 +265,26 @@ body {
 .search-box:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 4px var(--accent-glow), var(--shadow-hover);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 58px; top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.search-clear-btn:hover {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
 }
 
 .search-btn {
@@ -1105,7 +1125,8 @@ button,
 .sort-btn,
 .pg-btn,
 .auth-btn,
-.search-btn {
+.search-btn,
+.search-clear-btn {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
