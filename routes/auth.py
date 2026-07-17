@@ -78,7 +78,7 @@ def register():
             except psycopg2.IntegrityError:
                 flash('Username sudah digunakan.', 'danger')
 
-        return render_template('register.html')
+    return render_template('register.html')
 
 
 
