@@ -66,9 +66,21 @@ function initNavScroll() {
 function initNavCollapseFix() {
   const nav        = document.getElementById('mainNav');
   const navMenu    = document.getElementById('navMenu');
+  const toggler    = document.querySelector('.navbar-toggler');
   if (!nav || !navMenu) return;
   navMenu.addEventListener('show.bs.collapse', () => nav.classList.add('menu-open'));
   navMenu.addEventListener('hide.bs.collapse', () => nav.classList.remove('menu-open'));
+
+  // Klik di luar kotak menu (atau di luar tombol garis tiga) → otomatis nutup menu mobile
+  document.addEventListener('click', (e) => {
+    const isOpen = navMenu.classList.contains('show');
+    if (!isOpen) return;
+    const clickedInsideMenu = navMenu.contains(e.target);
+    const clickedToggler = toggler?.contains(e.target);
+    if (!clickedInsideMenu && !clickedToggler) {
+      bootstrap.Collapse.getOrCreateInstance(navMenu).hide();
+    }
+  });
 }
 
 // ── Page animation ────────────────────────────────────────────────────────
