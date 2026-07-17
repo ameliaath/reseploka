@@ -162,18 +162,31 @@ const SearchManager = {
     }
     toggleClearBtn();
 
-    // Fix bug: di iOS Safari, saat balik pakai gesture swipe (bfcache restore),
-    // halaman & hasil pencarian tetap terlihat seperti sebelumnya, tapi Safari
-    // suka ngosongin isi <input autocomplete="off"> secara sepihak sehingga
-    // kolom pencarian jadi kosong walau hasil resep yang tampil masih hasil
-    // pencarian tsb. Sinkronkan ulang isi kolom dengan parameter "q" di URL
-    // setiap kali halaman ditampilkan lagi dari cache.
-    window.addEventListener('pageshow', (e) => {
-      if (!e.persisted) return;
+    // Fix bug: pas balik ke halaman ini (baik lewat gesture swipe iOS, tombol
+    // back, maupun reload dari cache), kolom pencarian kadang gak sinkron
+    // dengan hasil yang tampil — ada kasus browser ngosongin isi <input>
+    // sementara hasil resep di bawahnya masih hasil pencarian sebelumnya
+    // (dipulihkan apa adanya dari cache). Setiap kali halaman "muncul" lagi,
+    // paksa sinkronkan ulang kolom & hasil pencarian dengan parameter "q"
+    // yang ada di URL, supaya keduanya selalu konsisten satu sama lain.
+    window.addEventListener('pageshow', () => {
       const p = new URLSearchParams(window.location.search);
       const qq = p.get('q');
       box.value = qq || '';
       toggleClearBtn();
+
+      const panel = document.getElementById('searchResultsPanel');
+      const list  = document.getElementById('searchResultsList');
+      const panelHidden = !panel || panel.style.display === 'none';
+      const listEmpty   = !list || list.children.length === 0;
+
+      if (qq && (panelHidden || listEmpty)) {
+        // Hasil belum/tidak tampil padahal ada query di URL → cari ulang
+        this.doSearch(qq);
+      } else if (!qq) {
+        // Gak ada query sama sekali → pastikan panel hasil ikut disembunyikan
+        this.clearSearch();
+      }
     });
   },
 
