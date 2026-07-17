@@ -166,10 +166,12 @@ const SearchManager = {
     // back, maupun reload dari cache), kolom pencarian kadang gak sinkron
     // dengan hasil yang tampil — ada kasus browser ngosongin isi <input>
     // sementara hasil resep di bawahnya masih hasil pencarian sebelumnya
-    // (dipulihkan apa adanya dari cache). Setiap kali halaman "muncul" lagi,
-    // paksa sinkronkan ulang kolom & hasil pencarian dengan parameter "q"
-    // yang ada di URL, supaya keduanya selalu konsisten satu sama lain.
-    window.addEventListener('pageshow', () => {
+    // (dipulihkan apa adanya dari cache). Safari/WebKit punya mekanisme
+    // internal buat "mengembalikan" isi form saat halaman muncul lagi, dan
+    // itu jalan SETELAH event pageshow — jadi bisa menimpa ulang value yang
+    // sudah kita set. Makanya kita paksa sinkronkan ulang beberapa kali
+    // (bukan cuma sekali) supaya value kita yang menang di akhir.
+    const syncBoxWithUrl = () => {
       const p = new URLSearchParams(window.location.search);
       const qq = p.get('q');
       box.value = qq || '';
@@ -187,6 +189,19 @@ const SearchManager = {
         // Gak ada query sama sekali → pastikan panel hasil ikut disembunyikan
         this.clearSearch();
       }
+    };
+
+    window.addEventListener('pageshow', () => {
+      syncBoxWithUrl();
+      // Lawan race condition: Safari kadang nimpa isi input ini secara async
+      // beberapa saat setelah pageshow, jadi kita cek ulang beberapa kali.
+      [50, 150, 400, 800].forEach(delay => setTimeout(syncBoxWithUrl, delay));
+    });
+
+    // Jaring pengaman tambahan: saat user balik ke tab ini (misal habis buka
+    // app lain lalu balik lagi), pastikan kolom masih sinkron.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') syncBoxWithUrl();
     });
   },
 
@@ -336,7 +351,7 @@ const SearchManager = {
 
     const div = document.createElement('a');
     div.className = 'recipe-card';
-    div.href = `/recipe/${recipe.id}?from=search&q=${encodeURIComponent(query)}`;
+    div.href = `/recipe/${recipe.id}?from=search&sq=${encodeURIComponent(query)}`;
     div.style.animationDelay = `${idx * 0.04}s`;
     div.style.animation = 'staggerFade 0.35s ease forwards';
     div.style.opacity = '0';

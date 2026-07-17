@@ -79,7 +79,7 @@ def recipe(recipe_id):
     # Konteks asal navigasi: kalau dibuka dari hasil pencarian, breadcrumb
     # harus balik ke pencarian itu, bukan ke halaman kategori generik.
     from_search  = request.args.get('from') == 'search'
-    search_query = request.args.get('q', '')
+    search_query = request.args.get('sq', '')
 
     return render_template('recipe.html',
         recipe={
