@@ -4,6 +4,27 @@
 
 {% block content %}
 
+<!-- ── Panduan Fitur Banner ── -->
+<div class="container" id="panduanBanner" style="display:none;margin-top:14px">
+  <div style="background:var(--accent-soft);border:1px solid var(--border);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:1.6rem;line-height:1">🎓</span>
+      <div>
+        <p style="margin:0;font-weight:800;color:var(--text-primary)">Belum tahu semua fitur ResepLoka?</p>
+        <p style="margin:0;font-size:.85rem;color:var(--text-secondary)">Ada favorit, riwayat, catatan, atur porsi, unduh PDF, dan banyak lagi🙌 cek di sini yuk!</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <a href="{{ url_for('main.panduan') }}" style="padding:8px 18px;background:var(--accent);color:#fff;border-radius:50px;font-weight:700;font-size:.85rem;text-decoration:none;white-space:nowrap">
+        <i class="bi bi-compass-fill"></i> Lihat Panduan
+      </a>
+      <button type="button" id="panduanBannerClose" aria-label="Tutup" style="background:none;border:none;color:var(--text-muted);font-size:1.1rem;line-height:1;padding:4px">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- ── Hero ── -->
 <section class="hero-section page-enter">
   <div class="container">
@@ -56,7 +77,7 @@
     <i class="bi bi-stars"></i>
     Hasil diurutkan berdasarkan <strong>kemiripan bahan</strong> dari
     {% if total_recipes %}{{ "{:,}".format(total_recipes).replace(",", ".") }}{% else %}ribuan{% endif %}
-    resep di database kami — hanya yang paling cocok yang ditampilkan lebih dulu,
+    resep di database kami, hanya yang paling cocok yang ditampilkan lebih dulu,
     jadi menunya jauh lebih variatif dari yang terlihat di layar 😉
   </p>
   <div class="sort-bar">
@@ -99,4 +120,24 @@
   </div>
 </section>
 
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function () {
+  var banner = document.getElementById('panduanBanner');
+  if (!banner) return;
+  var STORAGE_KEY = 'reseploka_panduan_banner_dismissed';
+  if (!localStorage.getItem(STORAGE_KEY)) {
+    banner.style.display = 'block';
+  }
+  var closeBtn = document.getElementById('panduanBannerClose');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function () {
+      banner.style.display = 'none';
+      localStorage.setItem(STORAGE_KEY, '1');
+    });
+  }
+})();
+</script>
 {% endblock %}

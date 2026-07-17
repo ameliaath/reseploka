@@ -60,6 +60,11 @@
             <i class="bi bi-sliders"></i> Preferensi
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'main.panduan' %}active{% endif %}" href="{{ url_for('main.panduan') }}" style="color:var(--accent-deep);font-weight:700">
+            <i class="bi bi-compass-fill"></i> Panduan Fitur
+          </a>
+        </li>
         <!-- User dropdown -->
         <li class="nav-item dropdown ms-2">
           <a class="nav-link dropdown-toggle d-flex align-items-center gap-1" href="#" data-bs-toggle="dropdown" style="font-weight:600;color:var(--accent)">

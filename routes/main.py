@@ -176,3 +176,15 @@ def rasa_from_recipe(recipe_id):
         from_recipe =True,
         favorites_count=len(get_favorites(uid)),
     )
+
+
+# ── Panduan Fitur ─────────────────────────────────────────────────────────────
+
+@main_bp.route('/panduan')
+@login_required
+def panduan():
+    """Halaman yang menjelaskan semua fitur ResepLoka dan letaknya."""
+    uid = current_user.id
+    return render_template('panduan.html',
+        favorites_count=len(get_favorites(uid)),
+    )

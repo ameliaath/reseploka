@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+
+{% block title %}Panduan Fitur – ResepLoka{% endblock %}
+
+{% block extra_head %}
+<style>
+.panduan-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 auto 8px;
+}
+.panduan-jump a {
+  padding: 6px 16px;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-deep);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.panduan-jump a:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.panduan-group-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 40px 0 18px;
+  scroll-margin-top: 90px;
+}
+.panduan-group-title:first-of-type { margin-top: 8px; }
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  height: 100%;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+.feature-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+.feature-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.feature-icon {
+  width: 40px; height: 40px;
+  min-width: 40px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+.feature-card-title {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+.feature-loc {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+  border-radius: 10px;
+  padding: 6px 10px;
+  margin: 8px 0;
+}
+.feature-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero ── -->
+<section class="recipe-hero page-enter">
+  <div class="container text-center">
+    <h1 class="recipe-hero-title"><i class="bi bi-compass-fill" style="color:var(--accent)"></i> Panduan Fitur ResepLoka</h1>
+    <p style="color:var(--text-secondary);max-width:600px;margin:0 auto 20px">
+      Ternyata masih banyak yang belum tahu semua fitur di ResepLoka 👀 Yuk kenalan satu-satu,
+      lengkap sama letaknya biar gampang dicoba.
+    </p>
+    <div class="panduan-jump">
+      <a href="#grp-cari">🔍 Cari &amp; Jelajahi</a>
+      <a href="#grp-resep">🍲 Di Halaman Resep</a>
+      <a href="#grp-kelola">📌 Simpan &amp; Kelola</a>
+      <a href="#grp-tampilan">🎨 Tampilan</a>
+    </div>
+  </div>
+</section>
+
+<div class="container py-4" style="max-width:1000px">
+
+  <!-- GROUP 1 : CARI & JELAJAHI -->
+  <h2 class="panduan-group-title" id="grp-cari">🔍 Cari &amp; Jelajahi Resep</h2>
+  <div class="row g-3 stagger">
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-search"></i></div>
+          <p class="feature-card-title">Pencarian Berbasis Bahan</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Beranda - kotak pencarian utama</div>
+        <p class="feature-desc">
+          Ketik <strong>bahan yang kamu punya</strong> (misal "ayam santan cabai"),
+          <u>bukan nama masakannya</u>. Sistem mencocokkan berdasarkan kemiripan bahan, bukan judul resep.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-sort-down"></i></div>
+          <p class="feature-card-title">Urutkan Hasil Pencarian</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Muncul di atas daftar hasil pencarian</div>
+        <p class="feature-desc">
+          Setelah mencari, pilih urutan: <strong>Paling Relevan</strong>, <strong>Paling Banyak Suka</strong>,
+          atau <strong>Paling Sedikit Suka</strong>.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+          <p class="feature-card-title">Jelajahi Kategori</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Beranda - bagian "Jelajahi Kategori"</div>
+        <p class="feature-desc">
+          Tidak tahu mau masak apa? Klik kategori (ayam, ikan, tahu, tempe, dll.) untuk melihat semua resep di kategori itu.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 2 : DI HALAMAN RESEP -->
+  <h2 class="panduan-group-title" id="grp-resep">🍲 Di Halaman Resep</h2>
+  <div class="row g-3 stagger">
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-egg-fried"></i></div>
+          <p class="feature-card-title">Atur Porsi &amp; Takaran Otomatis</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Halaman resep - bagian "🍽️ Porsi"</div>
+        <p class="feature-desc">
+          Ubah jumlah porsi, takaran semua bahan otomatis dihitung ulang sesuai jumlah porsi yang dipilih.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-sliders2"></i></div>
+          <p class="feature-card-title">Preferensi Rasa</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Tombol "Preferensi Rasa" di halaman resep, atau menu Preferensi</div>
+        <p class="feature-desc">
+          Atur level pedas 🌶️, manis 🍯, gurih 🧂, dan asam 🍋. Bahan yang disesuaikan akan ditandai
+          <strong>✦</strong> di daftar bahan.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-check2-square"></i></div>
+          <p class="feature-card-title">Checklist Belanja Bahan</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Halaman resep - bagian "✅ Bahan yang Perlu Dibeli"</div>
+        <p class="feature-desc">
+          Centang bahan yang sudah kamu beli, atau tambahkan catatan belanja sendiri. Terpisah dari daftar bahan resep.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-pencil-square"></i></div>
+          <p class="feature-card-title">Catatan Pribadi</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Halaman resep - bagian "📝 Catatan Saya"</div>
+        <p class="feature-desc">
+          Simpan catatan sendiri untuk resep tersebut, misalnya modifikasi bumbu atau tips dari percobaanmu.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-star-fill"></i></div>
+          <p class="feature-card-title">Rating Bintang</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Halaman resep - bagian "⭐ Nilai Resep Ini"</div>
+        <p class="feature-desc">
+          Beri nilai 1-5 bintang untuk resep yang sudah kamu coba, membantu kamu ingat mana yang paling enak.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+          <p class="feature-card-title">Unduh Resep (PDF)</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Halaman resep - tombol "Unduh Resep (PDF)"</div>
+        <p class="feature-desc">
+          Unduh resep dalam format PDF siap cetak, mengikuti jumlah porsi yang sedang kamu pilih.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-stars"></i></div>
+          <p class="feature-card-title">Resep Serupa</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Halaman resep - bagian bawah "💡 Resep Serupa"</div>
+        <p class="feature-desc">
+          Rekomendasi resep lain dengan bahan mirip, lengkap dengan persentase kemiripannya.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 3 : SIMPAN & KELOLA -->
+  <h2 class="panduan-group-title" id="grp-kelola">📌 Simpan &amp; Kelola</h2>
+  <div class="row g-3 stagger">
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-heart-fill"></i></div>
+          <p class="feature-card-title">Favorit</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Ikon hati di kartu/halaman resep, atau menu navbar "Favorit"</div>
+        <p class="feature-desc">
+          Simpan resep favoritmu dengan sekali klik. Semua resep favorit terkumpul di satu halaman khusus.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-clock-history"></i></div>
+          <p class="feature-card-title">Riwayat</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Menu navbar "Riwayat"</div>
+        <p class="feature-desc">
+          Resep yang kamu buka otomatis tercatat di sini, jadi gampang buka lagi resep yang pernah dilihat.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-egg"></i></div>
+          <p class="feature-card-title">Preferensi Diet &amp; Pantangan</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Menu navbar "Preferensi"</div>
+        <p class="feature-desc">
+          Aktifkan filter vegetarian, alergi seafood, bebas gluten, atau alergi kacang — hasil pencarian otomatis menyesuaikan.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUP 4 : TAMPILAN -->
+  <h2 class="panduan-group-title" id="grp-tampilan">🎨 Tampilan</h2>
+  <div class="row g-3 stagger mb-4">
+
+    <div class="col-md-4">
+      <div class="feature-card">
+        <div class="feature-card-head">
+          <div class="feature-icon"><i class="bi bi-circle-half"></i></div>
+          <p class="feature-card-title">Mode Tampilan</p>
+        </div>
+        <div class="feature-loc"><i class="bi bi-geo-alt-fill"></i> Pojok kanan atas navbar - 3 ikon kecil</div>
+        <p class="feature-desc">
+          Pilih <strong>Auto</strong> (ikut jam perangkat), <strong>Light</strong>, atau <strong>Dark</strong> sesuai kenyamanan matamu.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center py-3">
+    <a href="{{ url_for('main.index') }}" class="btn-atur-rasa" style="display:inline-flex;align-items:center;gap:6px;padding:10px 22px;background:var(--surface);color:var(--accent);border:1.5px solid var(--accent);border-radius:50px;font-weight:700;text-decoration:none;">
+      <i class="bi bi-house-heart"></i> Kembali ke Beranda
+    </a>
+  </div>
+
+</div>
+
+{% endblock %}
