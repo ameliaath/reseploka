@@ -8,7 +8,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from models.database import get_db
-
+import psycopg2
 
 class User(UserMixin):
     """Representasi user yang sedang login."""
@@ -39,12 +39,17 @@ def find_by_username(username):
 
 def create_user(username, password, is_admin=False):
     conn = get_db()
-    conn.execute(
-        'INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)',
-        (username, generate_password_hash(password), int(is_admin))
-    )
-    conn.commit()
-    conn.close()
+    try:
+        conn.execute(
+            'INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)',
+            (username, generate_password_hash(password), int(is_admin))
+        )
+        conn.commit()
+    except psycopg2.IntegrityError:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 
 def verify_password(row, password):

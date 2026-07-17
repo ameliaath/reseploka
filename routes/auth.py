@@ -4,6 +4,7 @@ routes/auth.py
 Blueprint untuk autentikasi: login, register, logout.
 """
 import sqlite3
+import psycopg2
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -68,16 +69,17 @@ def register():
         else:
             try:
                 create_user(username, password)
-                # Auto-login setelah daftar – tidak perlu login lagi
+                # Auto-login setelah daftar - tidak perlu login lagi
                 row = find_by_username(username)
                 if row:
                     login_user(User(row['id'], row['username']), remember=True)
                     flash(f'Selamat datang, {username}! Akun berhasil dibuat. 🎉', 'success')
                     return redirect(url_for('main.index'))
-            except sqlite3.IntegrityError:
+            except psycopg2.IntegrityError:
                 flash('Username sudah digunakan.', 'danger')
 
-    return render_template('register.html')
+        return render_template('register.html')
+
 
 
 @auth_bp.route('/logout')
