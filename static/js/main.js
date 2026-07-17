@@ -160,6 +160,21 @@ const SearchManager = {
       box.value = q;
       this.doSearch(q);
     }
+    toggleClearBtn();
+
+    // Fix bug: di iOS Safari, saat balik pakai gesture swipe (bfcache restore),
+    // halaman & hasil pencarian tetap terlihat seperti sebelumnya, tapi Safari
+    // suka ngosongin isi <input autocomplete="off"> secara sepihak sehingga
+    // kolom pencarian jadi kosong walau hasil resep yang tampil masih hasil
+    // pencarian tsb. Sinkronkan ulang isi kolom dengan parameter "q" di URL
+    // setiap kali halaman ditampilkan lagi dari cache.
+    window.addEventListener('pageshow', (e) => {
+      if (!e.persisted) return;
+      const p = new URLSearchParams(window.location.search);
+      const qq = p.get('q');
+      box.value = qq || '';
+      toggleClearBtn();
+    });
   },
 
   updateCountLabel() {
