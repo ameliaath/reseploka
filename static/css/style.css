@@ -195,6 +195,24 @@ body {
   vertical-align: middle;
 }
 
+.help-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.help-btn:hover, .help-btn.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-deep);
+}
+
 /* Theme Switcher */
 .theme-switcher {
   display: flex;
