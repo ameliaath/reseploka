@@ -135,6 +135,23 @@ body {
   background: var(--accent-soft);
 }
 
+/* Tombol garis-tiga (hamburger) mobile — default Bootstrap warnanya
+   hardcoded gelap sehingga hilang di dark mode. Override pakai SVG
+   custom yang warnanya ikut tema. */
+.navbar-toggler {
+  border-color: var(--border) !important;
+  background: var(--bg-card);
+}
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(45, 26, 34, 0.85)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+[data-theme="dark"] .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(245, 230, 236, 0.95)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
 /* Menu mobile (saat navbar di-collapse) — beri background SOLID OPAQUE
    (bukan rgba transparan) + stacking context sendiri, supaya tidak kena
    bug rendering Safari iOS pada kombinasi position:sticky + backdrop-filter
