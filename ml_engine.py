@@ -96,7 +96,7 @@ feature_names = np.array(tfidf.get_feature_names_out())
 # ── Utility yang dipakai route ────────────────────────────────────────────────
 
 def apply_preferences(results_df, prefs: dict):
-    """Filter DataFrame resep berdasarkan preferensi diet user."""
+    """Filter DataFrame resep berdasarkan preferensi pantangan user."""
     mask = []
     for _, row in results_df.iterrows():
         tags = row.get('tags', set())
