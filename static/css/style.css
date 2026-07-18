@@ -19,28 +19,35 @@
   --highlight-text: #7a4e00;
   --success: #10b981;
   --danger: #f43f5e;
+  --love: #db2777;
+  --love-deep: #be185d;
+  --love-soft: #fce7f3;
   --nav-height: 68px;
 }
 
 [data-theme="dark"] {
-  --bg-primary: #1a0d14;
-  --bg-secondary: #120a10;
-  --bg-card: #221018;
-  --bg-nav: rgba(26, 13, 20, 0.95);
-  --text-primary: #f5d0e3;
-  --text-secondary: #c08aa8;
-  --text-muted: #8a5a72;
-  --accent: #c2185b;
-  --accent-deep: #e91e8c;
-  --accent-soft: #3a1428;
-  --accent-glow: rgba(194, 24, 91, 0.3);
-  --border: #4a1e32;
-  --shadow: 0 4px 24px rgba(194, 24, 91, 0.15);
-  --shadow-hover: 0 8px 40px rgba(194, 24, 91, 0.3);
-  --highlight: #4a2a00;
+  /* Dark / Rose Bright, kontras tinggi biar tombol tetap keliatan, ga keunguan */
+  --bg-primary: #1f1518;
+  --bg-secondary: #170f12;
+  --bg-card: #251920;
+  --bg-nav: rgba(31, 21, 24, 0.95);
+  --text-primary: #f5e6ec;
+  --text-secondary: #c9a8b8;
+  --text-muted: #8f7080;
+  --accent: #ff5fa3;
+  --accent-deep: #ff85b8;
+  --accent-soft: #3d2430;
+  --accent-glow: rgba(255, 95, 163, 0.35);
+  --border: #3d2b33;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 8px 40px rgba(255, 95, 163, 0.35);
+  --highlight: #4a3410;
   --highlight-text: #ffd080;
-  --success: #059669;
-  --danger: #e11d48;
+  --success: #34d399;
+  --danger: #fb7185;
+  --love: #ff85b8;
+  --love-deep: #ffa8cc;
+  --love-soft: #3d2430;
 }
 
 :root {
@@ -161,7 +168,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent);
+  background: var(--love);
   color: #fff;
   font-size: 0.65rem;
   font-weight: 700;
@@ -733,8 +740,8 @@ mark.bahan-highlight {
 }
 
 .fav-btn.active, .fav-btn:hover {
-  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
-  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--love-deep), var(--love));
+  border-color: var(--love);
   color: #fff;
 }
 
