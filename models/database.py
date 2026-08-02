@@ -27,7 +27,6 @@ Contoh .env untuk Supabase (production):
   DB_SSLMODE=require
 """
 import os
-import re
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -44,25 +43,26 @@ POSTGRES_CONFIG = {
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Connection wrapper — meniru antarmuka sqlite3 agar semua models/*.py
-# tidak perlu diubah sama sekali (execute/fetchone/fetchall/commit/close)
+# Connection wrapper — pembungkus tipis di atas psycopg2 untuk kenyamanan
+# pemanggilan (execute/fetchone/fetchall/commit/close bisa di-chain)
 # ══════════════════════════════════════════════════════════════════════════════
 
 class _PostgresConn:
     """
-    Wrapper psycopg2 yang meniru antarmuka sqlite3.Connection sehingga semua
-    model di /models/*.py bisa dipakai tanpa perubahan apapun.
+    Wrapper tipis di atas koneksi psycopg2.
 
-    - RealDictCursor  → row bisa diakses sebagai row['field'] (sama seperti sqlite3.Row)
-    - _adapt_sql()    → konversi placeholder ? → %s dan datetime() → NOW()
-                        sebelum dikirim ke Postgres
+    - RealDictCursor → row bisa diakses sebagai row['field']
+    - execute() mengembalikan self supaya bisa di-chain:
+      conn.execute(sql, params).fetchone()
+    - Query ditulis langsung dengan placeholder native psycopg2 (%s)
+      di seluruh models/*.py, tanpa lapisan konversi apa pun.
     """
     def __init__(self, conn):
         self._conn   = conn
         self._cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     def execute(self, sql, params=()):
-        self._cursor.execute(_adapt_sql(sql), params)
+        self._cursor.execute(sql, params)
         return self  # agar bisa di-chain: conn.execute(...).fetchone()
 
     def fetchone(self):
@@ -86,28 +86,6 @@ class _PostgresConn:
             self._conn.close()
         except Exception:
             pass
-
-
-def _adapt_sql(sql: str) -> str:
-    """
-    Konversi minimal SQLite-style DML → valid PostgreSQL:
-
-    1. Placeholder  ?  →  %s
-       (psycopg2 memakai %s, bukan ?)
-
-    2. datetime('now','localtime')  →  NOW()
-       (fungsi SQLite, tidak ada di Postgres)
-
-    Hal-hal yang TIDAK diubah karena sudah native di Postgres:
-    - ON CONFLICT(...) DO UPDATE SET ... excluded.col  (sintaks ini dari Postgres)
-    - LIMIT -1 OFFSET n  (Postgres mendukung LIMIT -1 = tanpa batas)
-    """
-    sql = sql.replace('?', '%s')
-    sql = re.sub(r"datetime\('now'\s*,\s*'localtime'\)", 'NOW()', sql, flags=re.IGNORECASE)
-    # LIMIT -1 OFFSET n (SQLite "tanpa batas") → Postgres tidak support LIMIT negatif,
-    # pakai ALL sebagai pengganti "tanpa batas"
-    sql = re.sub(r'LIMIT\s+-1\s+OFFSET', 'LIMIT ALL OFFSET', sql, flags=re.IGNORECASE)
-    return sql
 
 
 # ══════════════════════════════════════════════════════════════════════════════

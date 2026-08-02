@@ -198,7 +198,7 @@ _COMPILED = {
 def get_flavor_profile(user_id: int) -> dict:
     conn = get_db()
     row  = conn.execute(
-        'SELECT * FROM flavor_profile WHERE user_id=?', (user_id,)
+        'SELECT * FROM flavor_profile WHERE user_id=%s', (user_id,)
     ).fetchone()
     conn.close()
     if row:
@@ -221,7 +221,7 @@ def save_flavor_profile(user_id: int, profile: dict):
     conn.execute(
         '''INSERT INTO flavor_profile
                (user_id, spicy_level, sweet_level, savory_level, sour_level, servings)
-           VALUES (?,?,?,?,?,?)
+           VALUES (%s,%s,%s,%s,%s,%s)
            ON CONFLICT(user_id) DO UPDATE SET
                spicy_level=excluded.spicy_level,
                sweet_level=excluded.sweet_level,

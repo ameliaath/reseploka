@@ -12,7 +12,7 @@ def get_ratings(user_id):
     """Kembalikan dict {recipe_id_str: stars} milik user."""
     conn = get_db()
     rows = conn.execute(
-        'SELECT recipe_id, stars FROM ratings WHERE user_id=?', (user_id,)
+        'SELECT recipe_id, stars FROM ratings WHERE user_id=%s', (user_id,)
     ).fetchall()
     conn.close()
     return {str(r['recipe_id']): r['stars'] for r in rows}
@@ -28,14 +28,14 @@ def set_rating(user_id, recipe_id, stars):
 
     conn = get_db()
     conn.execute(
-        '''INSERT INTO ratings (user_id, recipe_id, stars) VALUES (?,?,?)
+        '''INSERT INTO ratings (user_id, recipe_id, stars) VALUES (%s,%s,%s)
            ON CONFLICT(user_id, recipe_id) DO UPDATE SET stars=excluded.stars''',
         (user_id, recipe_id, stars)
     )
     conn.commit()
     all_stars = [
         r['stars'] for r in conn.execute(
-            'SELECT stars FROM ratings WHERE user_id=?', (user_id,)
+            'SELECT stars FROM ratings WHERE user_id=%s', (user_id,)
         ).fetchall()
     ]
     conn.close()
@@ -52,7 +52,7 @@ def get_preferences(user_id):
     """Kembalikan dict preferensi diet user."""
     conn = get_db()
     row = conn.execute(
-        'SELECT * FROM preferences WHERE user_id=?', (user_id,)
+        'SELECT * FROM preferences WHERE user_id=%s', (user_id,)
     ).fetchone()
     conn.close()
     if row:
@@ -65,7 +65,7 @@ def save_preferences(user_id, prefs: dict):
     conn = get_db()
     conn.execute(
         '''INSERT INTO preferences (user_id, vegetarian, no_spicy, no_seafood, no_gluten, no_nuts)
-           VALUES (?,?,?,?,?,?)
+           VALUES (%s,%s,%s,%s,%s,%s)
            ON CONFLICT(user_id) DO UPDATE SET
                vegetarian=excluded.vegetarian,
                no_spicy=excluded.no_spicy,
